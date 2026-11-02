@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menu Anastasis – Kantin dekat Universitas Widyatama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16282b; --paper:#f4faf6; --card:#ffffff; --leaf:#1b7a58; --sambal:#d32f2f;
+  --kuning:#ffc83d; --line:#cfe3d7; --muted:#4d6a62;
+}
+:root[data-theme="dark"]{
+  --ink:#eaf5ee; --paper:#0f1d1a; --card:#172a25; --leaf:#4fd1a1; --sambal:#ff6b5e;
+  --kuning:#ffc83d; --line:#2a4a40; --muted:#9fc2b5;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}
+h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;line-height:1.15}
+a{color:var(--leaf)}
+:focus-visible{outline:3px solid var(--kuning);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header.nav{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:2px solid var(--ink)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
+.brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.3rem;text-decoration:none;color:var(--ink)}
+.nav ul{display:flex;gap:16px;list-style:none;padding:0;flex-wrap:wrap;align-items:center}
+.nav a.l{text-decoration:none;color:var(--ink);font-weight:500}
+.nav a.l:hover{color:var(--sambal)}
+button{font:inherit;cursor:pointer}
+#tema{border:2px solid var(--ink);background:var(--kuning);color:#16282b;border-radius:999px;padding:4px 14px;font-weight:700}
+
+/* Hero: papan harga */
+.hero{padding:48px 0 36px}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
+.hero h1{font-size:clamp(2.4rem,6vw,4.2rem);font-weight:800}
+.hero p{max-width:46ch;margin:16px 0 22px;color:var(--muted);font-size:1.08rem}
+.btn{display:inline-block;background:var(--sambal);color:#fff;border:2px solid var(--ink);border-radius:10px;padding:10px 20px;font-weight:700;text-decoration:none;box-shadow:4px 4px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.alt{background:var(--card);color:var(--ink);margin-left:8px}
+.hero img{width:100%;border:3px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 var(--leaf);display:block}
+#sapa{margin-top:18px;font-weight:700;color:var(--leaf);min-height:1.6em}
+
+section{padding:44px 0}
+section h2{font-size:clamp(1.7rem,4vw,2.4rem);margin-bottom:6px}
+.sub{color:var(--muted);margin-bottom:22px}
+
+/* Menu */
+.filter{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
+.filter button{border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 18px;font-weight:500}
+.filter button.aktif{background:var(--ink);color:var(--paper)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.item{background:var(--card);border:2px solid var(--ink);border-radius:14px;overflow:hidden}
+.item img{width:100%;aspect-ratio:300/190;object-fit:cover;display:block;border-bottom:2px solid var(--ink)}
+.item div{padding:12px 14px 16px}
+.item h3{font-size:1.1rem}
+.item .harga{display:inline-block;margin-top:6px;background:var(--kuning);color:#16282b;font-weight:700;padding:2px 10px;border-radius:6px}
+.item[hidden]{display:none}
+.item p{font-size:.9rem;color:var(--muted);margin-top:4px}
+.best{display:inline-block;margin-left:6px;background:var(--sambal);color:#fff;font-size:.75rem;font-weight:700;padding:1px 8px;border-radius:6px}
+[hidden]{display:none!important}
+fieldset.tambah{border:2px solid var(--line);border-radius:10px;padding:4px 14px 14px;margin-top:14px}
+fieldset.tambah legend{font-weight:700;padding:0 6px}
+.cart{list-style:none;padding:0}
+.cart li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.cart .nm{flex:1}
+.cart .qty{white-space:nowrap}
+.cart li button{border:2px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:6px;min-width:30px;height:30px;font-weight:700}
+.total{font-weight:700;margin-top:8px}
+#hasil{white-space:pre-line}
+
+/* Tabel */
+.scroll{overflow-x:auto;border:2px solid var(--ink);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:480px;background:var(--card)}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:var(--leaf);color:#fff}
+td.r,th.r{text-align:right}
+tr:last-child td{border-bottom:0}
+
+/* Lokasi + form */
+.dua{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.box{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:22px}
+.box h3{margin-bottom:10px}
+label{display:block;font-weight:700;margin:12px 0 4px}
+input,select{width:100%;padding:9px 12px;border:2px solid var(--ink);border-radius:8px;font:inherit;background:var(--paper);color:var(--ink)}
+.err{color:var(--sambal);font-size:.9rem;min-height:1.2em}
+#hasil{margin-top:14px;padding:12px;border-radius:8px;background:var(--paper);border:2px dashed var(--leaf);display:none}
+
+footer{background:var(--ink);color:var(--paper);padding:28px 0;margin-top:24px}
+footer a{color:var(--kuning)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+:root[data-theme="dark"] footer{background:#0a1411;color:#eaf5ee}
+
+@media (max-width:760px){
+  .hero .wrap,.dua{grid-template-columns:1fr}
+  .btn.alt{margin:10px 0 0}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#atas">Menu Anastasis</a>
+    <nav>
+      <ul>
+        <li><a class="l" href="#menu">Menu</a></li>
+        <li><a class="l" href="#harga">Daftar harga</a></li>
+        <li><a class="l" href="#pesan">Pesan</a></li>
+        <li><a class="l" href="#lokasi">Lokasi</a></li>
+        <li><button id="tema" type="button" aria-label="Ganti tema terang atau gelap">Mode gelap</button></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="atas">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Halo Pengunjung ANASTASIS.</h1>
+        <p>Kantin Anastasis adalah tempat makan yang berlokasi di Gg. Pelita II, Sukapada, Bandung, dekat Universitas Widyatama. Menyediakan pilihan makanan untuk mahasiswa dan masyarakat sekitar dengan lokasi yang strategis, suasana santai, serta harga yang bersahabat. Cocok menjadi tempat makan dan berkumpul bersama teman di sela-sela aktivitas kuliah..</p>
+        <a class="btn" href="#menu">Lihat menu</a>
+        <button class="btn alt" id="btnSapa" type="button">Sapa Anastasis</button>
+        <p id="sapa" role="status"></p>
+      </div>
+      <img alt="Halo Mahasiswa" src="Kantin-Anastasis.jpg.jpeg">
+    </div>
+  </section>
+
+  <section id="menu">
+    <div class="wrap">
+      <h2>Menu Anastasis</h2>
+      <p class="sub">One stop eat &amp; drink. Pilihan sambal untuk Paket Ayam: Penyet, Dadak, Merapi, Matah, Colo, dan Hejo.</p>
+      <div class="filter" role="group" aria-label="Filter menu">
+        <button type="button" class="aktif" data-f="semua">Semua</button>
+        <button type="button" data-f="makanan">Makanan</button>
+        <button type="button" data-f="minuman">Minuman</button>
+      </div>
+      <div class="grid" id="daftar"></div>
+    </div>
+  </section>
+
+  <section id="harga">
+    <div class="wrap">
+      <h2>Daftar harga lengkap</h2>
+      <p class="sub">Semua menu dan variasinya, sesuai daftar menu di kantin.</p>
+      <div class="scroll">
+        <table>
+          <caption hidden>Daftar menu dan harga Anastasis</caption>
+          <thead><tr><th>No</th><th>Menu</th><th>Kategori</th><th class="r">Harga</th></tr></thead>
+          <tbody id="isiTabel"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="pesan">
+    <div class="wrap dua">
+      <div class="box">
+        <h3>Pesan lebih awal</h3>
+        <form id="form" novalidate>
+          <label for="nama">Nama</label>
+          <input id="nama" type="text" autocomplete="name">
+          <div class="err" id="eNama"></div>
+
+          <label for="meja">Nomor meja</label>
+          <input id="meja" type="number" min="1" max="20" placeholder="Contoh: 5">
+          <div class="err" id="eMeja"></div>
+
+          <fieldset class="tambah">
+            <legend>Tambah menu</legend>
+            <label for="pilih">Menu</label>
+            <select id="pilih"></select>
+            <div id="boxSambal" hidden>
+              <label for="sambal">Pilihan sambal</label>
+              <select id="sambal">
+                <option value="">Pilih sambal</option>
+                <option>Penyet</option><option>Dadak</option><option>Merapi</option>
+                <option>Matah</option><option>Colo</option><option>Hejo</option>
+              </select>
+            </div>
+            <label for="jml">Jumlah porsi</label>
+            <input id="jml" type="number" min="1" max="20" value="1">
+            <div class="err" id="eMenu"></div>
+            <button class="btn alt" type="button" id="btnTambah" style="margin:10px 0 0">Tambah ke pesanan</button>
+          </fieldset>
+
+          <h3 style="margin-top:18px">Pesanan kamu</h3>
+          <ul id="keranjang" class="cart"></ul>
+          <p id="total" class="total">Belum ada menu dipilih.</p>
+          <div class="err" id="eKeranjang"></div>
+          <button class="btn" type="submit" style="margin-top:10px">Kirim pesanan</button>
+        </form>
+        <div id="hasil" role="status"></div>
+      </div>
+
+      <div class="box" id="lokasi">
+        <h3>Lokasi dan tautan</h3>
+        <p>Gg. Pelita II No.30, Sukapada, Kec. Cibeunying Kidul, Kota Bandung, Jawa Barat 40125.</p>
+        <ul style="margin:14px 0 0 20px">
+          <li><a href="https://www.google.com/maps/search/?api=1&query=Gg.+Pelita+II+No.30+Sukapada+Cibeunying+Kidul+Bandung" target="_blank" rel="noopener">Buka di Google Maps</a></li>
+          <li><a href="https://www.widyatama.ac.id" target="_blank" rel="noopener">Website Universitas Widyatama</a></li>
+          <li><a href="https://wa.me/6281802152911" target="_blank" rel="noopener">Nomor Whatsapp</a></li>
+          <li><a href="#atas">Kembali ke atas</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <strong>Menu Anastasis</strong><br>
+      Dibuat oleh <strong>Farel Rafly Fahrezi</strong> – NPM <strong>251111014</strong>
+    </div>
+    <div>Tugas Pembuatan Website: HTML, CSS, dan JavaScript.<br>Universitas Widyatama, Bandung.</div>
+  </div>
+</footer>
+
+<script>
+// Data menu (sesuai daftar menu Kantin Anastasis)
+var MENU = [
+  {k:'makanan', n:'Paket Ayam Goreng', p:17000, foto:'ayam-goreng.jpg', card:1, sambal:1, d:'Nasi, ayam goreng, tahu tempe, sambal pilihan'},
+  {k:'makanan', n:'Paket Ayam Bakar', p:17000, foto:'ayambakar.jpg', card:1, sambal:1, d:'Nasi, ayam bakar, tahu tempe, sambal pilihan'},
+  {k:'makanan', n:'Paket Ayam Nasi Tutug Oncom', p:19000, foto:'nasitutug.jpg', card:1, sambal:1, d:'Ayam goreng/bakar, tahu tempe, sambal, kerupuk'},
+  {k:'makanan', n:'Nasi Lengko', p:11000, foto:'nasilengko.jpg', card:1},
+  {k:'makanan', n:'Nasi Lengko + Telur Dadar', p:15000},
+  {k:'makanan', n:'Nasi Pecel Telur Sosis', p:11000},
+  {k:'makanan', n:'Nasi Pecel Telur Tahu', p:10000},
+  {k:'makanan', n:'Tahu Bejek', p:5000},
+  {k:'makanan', n:'Tempe Penyet', p:5000},
+  {k:'makanan', n:'Pelecing Kangkung', p:5000, foto:'pelecingkangkung.jpg', card:1},
+  {k:'makanan', n:'Indomie Kuah', p:5000},
+  {k:'makanan', n:'Indomie Kuah + Telur', p:9000},
+  {k:'makanan', n:'Indomie Kuah + Keju', p:9000},
+  {k:'makanan', n:'Indomie Kuah + Telur + Keju', p:13000},
+  {k:'makanan', n:'Indomie Goreng', p:6000, foto:'indomie.jpg', card:1},
+  {k:'makanan', n:'Indomie Goreng + Telur', p:10000},
+  {k:'makanan', n:'Indomie Goreng Jumbo', p:8000},
+  {k:'makanan', n:'Indomie Goreng Jumbo + Telur', p:12000},
+  {k:'minuman', n:'Es Teh Manis Jumbo', p:4000, foto:'estehjumbo.jpg', card:1, best:1},
+  {k:'minuman', n:'Es Teh Tawar', p:3000},
+  {k:'minuman', n:'Es Jeruk', p:8000, foto:'esjeruk.jpg', card:1},
+  {k:'minuman', n:'Es Lemon', p:8000},
+  {k:'minuman', n:'Es Lemon Tea', p:5000},
+  {k:'minuman', n:'Es Nutrisari', p:5000},
+  {k:'minuman', n:'Cappuccino Ice / Hot', p:5000},
+  {k:'minuman', n:'Kopi Hitam / Kopi Susu', p:5000, foto:'kopi.jpg', card:1},
+  {k:'minuman', n:'Susu Coklat / Vanilla', p:8000},
+  {k:'minuman', n:'Teh Tarik', p:5000, foto:'tehtarik.jpg', card:1},
+  {k:'minuman', n:'Chocolatos Matcha', p:5000},
+  {k:'minuman', n:'Cola / Fanta / Sprite Susu', p:10000},
+  {k:'minuman', n:'Lemon Squash', p:10000},
+  {k:'minuman', n:'Soft Drink', p:6000},
+  {k:'minuman', n:'Nipis Madu', p:5000},
+  {k:'minuman', n:'Air Mineral', p:4000},
+  {k:'minuman', n:'Teh Kotak / Teh Pucuk', p:4000},
+  {k:'minuman', n:'Teh Botol', p:5000}
+];
+function rp(x){ return 'Rp' + x.toLocaleString('id-ID'); }
+function gambar(m){ return m.foto; }
+// Kalau file foto belum ada, tampilkan kotak abu-abu bertuliskan nama menu
+function cadangan(img, nama){
+  var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 190'><rect width='300' height='190' fill='%23dfe9e3'/><text x='150' y='100' font-size='16' font-family='sans-serif' text-anchor='middle' fill='%234d6a62'>Foto " + nama.replace(/&/g,'') + " belum ada</text></svg>";
+  img.onerror = null;
+  img.src = 'data:image/svg+xml;utf8,' + svg;
+}
+
+// Kartu menu unggulan
+var daftar = document.getElementById('daftar');
+MENU.forEach(function (m) {
+  if (!m.card) return;
+  var el = document.createElement('article');
+  el.className = 'item'; el.dataset.k = m.k;
+  el.innerHTML = '<img alt="' + m.n + '" src="' + gambar(m) + '" onerror="cadangan(this, this.alt)"><div><h3>' + m.n + (m.best ? '<span class="best">Best seller</span>' : '') + '</h3>' +
+    (m.d ? '<p>' + m.d + '</p>' : '') + '<span class="harga">' + rp(m.p) + '</span></div>';
+  daftar.appendChild(el);
+});
+
+// Tabel harga + pilihan menu pada formulir
+var tabel = document.getElementById('isiTabel');
+var pilih = document.getElementById('pilih');
+pilih.innerHTML = '<option value="">Pilih menu</option>';
+MENU.forEach(function (m, i) {
+  var tr = document.createElement('tr');
+  tr.innerHTML = '<td>' + (i + 1) + '</td><td>' + m.n + '</td><td>' + (m.k === 'makanan' ? 'Makanan' : 'Minuman') + '</td><td class="r">' + rp(m.p) + '</td>';
+  tabel.appendChild(tr);
+  var o = document.createElement('option');
+  o.value = i; o.textContent = m.n + ' (' + rp(m.p) + ')';
+  pilih.appendChild(o);
+});
+pilih.addEventListener('change', function () {
+  var m = MENU[pilih.value];
+  document.getElementById('boxSambal').hidden = !(m && m.sambal);
+});
+
+// 1. Tombol sapaan
+document.getElementById('btnSapa').addEventListener('click', function () {
+  var jam = new Date().getHours();
+  var waktu = jam < 11 ? 'pagi' : jam < 15 ? 'siang' : jam < 18 ? 'sore' : 'malam';
+  document.getElementById('sapa').textContent = 'Selamat ' + waktu + '! Mau makan apa hari ini?';
+});
+
+// 2. Ganti tema terang / gelap
+var tombolTema = document.getElementById('tema');
+tombolTema.addEventListener('click', function () {
+  var root = document.documentElement;
+  var gelap = root.getAttribute('data-theme') === 'dark';
+  root.setAttribute('data-theme', gelap ? 'light' : 'dark');
+  tombolTema.textContent = gelap ? 'Mode gelap' : 'Mode terang';
+});
+
+// 3. Filter menu
+document.querySelectorAll('.filter button').forEach(function (b) {
+  b.addEventListener('click', function () {
+    document.querySelectorAll('.filter button').forEach(function (x) { x.classList.remove('aktif'); });
+    b.classList.add('aktif');
+    var f = b.dataset.f;
+    document.querySelectorAll('#daftar .item').forEach(function (it) {
+      it.hidden = !(f === 'semua' || it.dataset.k === f);
+    });
+  });
+});
+
+// 4. Pesanan lebih dari satu menu (keranjang)
+var keranjang = [];
+var ulKeranjang = document.getElementById('keranjang');
+var elTotal = document.getElementById('total');
+
+function tampilKeranjang() {
+  ulKeranjang.innerHTML = '';
+  var total = 0;
+  keranjang.forEach(function (it, i) {
+    var m = MENU[it.idx], sub = m.p * it.jml;
+    total += sub;
+    var li = document.createElement('li');
+    li.innerHTML = '<span class="nm">' + m.n + (it.sambal ? ' (sambal ' + it.sambal + ')' : '') + '</span>' +
+      '<span class="qty"><button type="button" data-a="kurang" data-i="' + i + '" aria-label="Kurangi jumlah">-</button> <b>' + it.jml +
+      '</b> <button type="button" data-a="tambah" data-i="' + i + '" aria-label="Tambah jumlah">+</button></span>' +
+      '<span>' + rp(sub) + '</span>' +
+      '<button type="button" data-a="hapus" data-i="' + i + '" aria-label="Hapus menu">x</button>';
+    ulKeranjang.appendChild(li);
+  });
+  elTotal.textContent = keranjang.length ? 'Total: ' + rp(total) : 'Belum ada menu dipilih.';
+}
+
+document.getElementById('btnTambah').addEventListener('click', function () {
+  var idx = pilih.value, m = idx === '' ? null : MENU[idx];
+  var sambal = document.getElementById('sambal').value;
+  var jml = parseInt(document.getElementById('jml').value, 10);
+  var eMenu = document.getElementById('eMenu');
+  if (!m) { eMenu.textContent = 'Pilih salah satu menu.'; return; }
+  if (m.sambal && !sambal) { eMenu.textContent = 'Pilih sambalnya.'; return; }
+  if (isNaN(jml) || jml < 1 || jml > 20) { eMenu.textContent = 'Jumlah harus 1 sampai 20.'; return; }
+  eMenu.textContent = '';
+  var s2 = m.sambal ? sambal : '';
+  var ada = keranjang.find(function (it) { return it.idx === idx && it.sambal === s2; });
+  if (ada) { ada.jml = Math.min(ada.jml + jml, 99); }
+  else { keranjang.push({ idx: idx, sambal: s2, jml: jml }); }
+  pilih.value = ''; document.getElementById('sambal').value = '';
+  document.getElementById('boxSambal').hidden = true;
+  document.getElementById('jml').value = 1;
+  document.getElementById('eKeranjang').textContent = '';
+  tampilKeranjang();
+});
+
+ulKeranjang.addEventListener('click', function (e) {
+  var b = e.target.closest('button');
+  if (!b) return;
+  var i = parseInt(b.dataset.i, 10), a = b.dataset.a;
+  if (a === 'tambah') keranjang[i].jml = Math.min(keranjang[i].jml + 1, 99);
+  if (a === 'kurang') keranjang[i].jml -= 1;
+  if (a === 'hapus' || keranjang[i].jml < 1) keranjang.splice(i, 1);
+  tampilKeranjang();
+});
+
+// 5. Validasi dan kirim pesanan
+document.getElementById('form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var nama = document.getElementById('nama').value.trim();
+  var meja = parseInt(document.getElementById('meja').value, 10);
+  var ok = true;
+  document.getElementById('eNama').textContent = nama.length < 3 ? (ok = false, 'Isi nama minimal 3 huruf.') : '';
+  document.getElementById('eMeja').textContent = (isNaN(meja) || meja < 1 || meja > 20) ? (ok = false, 'Nomor meja harus 1 sampai 20.') : '';
+  document.getElementById('eKeranjang').textContent = !keranjang.length ? (ok = false, 'Tambahkan minimal satu menu ke pesanan.') : '';
+  var hasil = document.getElementById('hasil');
+  if (!ok) { hasil.style.display = 'none'; return; }
+  var total = 0, baris = [];
+  keranjang.forEach(function (it) {
+    var m = MENU[it.idx];
+    total += m.p * it.jml;
+    baris.push('- ' + it.jml + ' x ' + m.n + (it.sambal ? ' (sambal ' + it.sambal + ')' : '') + ' = ' + rp(m.p * it.jml));
+  });
+  hasil.style.display = 'block';
+  hasil.textContent = 'Terima kasih, ' + nama + '! Pesananmu:\n' + baris.join('\n') + '\nTotal ' + rp(total) + '. Diantar ke meja ' + meja + '.';
+});
+</script>
+</body>
+</html>
